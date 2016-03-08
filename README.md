@@ -1,2 +1,2 @@
 # netEngine
-A base for implementing online based gameplay into your GameMaker: Studio game.
+A BAREBONES base for implementing online based gameplay into your GameMaker: Studio game.
