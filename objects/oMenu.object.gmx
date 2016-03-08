@@ -28,6 +28,8 @@
             <string>draw_set_halign(fa_center)
 draw_set_valign(fa_middle)
 draw_set_colour(c_white)
+
+// -- Just set these up for future use. Also save some speed so we don't have to run it every frame.
 </string>
           </argument>
         </arguments>
@@ -62,6 +64,8 @@ if keyboard_check_pressed(ord("H")) {
     instance_create(0,0,oClient)
     instance_destroy()
 }
+
+// -- Simple and almost self explainatory menu system.
 </string>
           </argument>
         </arguments>

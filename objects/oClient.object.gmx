@@ -25,9 +25,11 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>netSocket = network_create_socket(network_socket_tcp)
+            <string>// -- Create a socket for recieving data and connect it to a server.
+netSocket = network_create_socket(network_socket_tcp)
 netConnect = network_connect(netSocket,"127.0.0.1",15000)
 netPingTick = 0
+// -- netPing: Used to store our packet latency (in millseconds)
 netPing = 0
 </string>
           </argument>
@@ -51,7 +53,10 @@ netPing = 0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>netPingTick++
+            <string>// -- Increment our netPingTick variable every step
+netPingTick++
+// -- See if it has been 8 ticks, if so send a packet with our current time
+// -- to the server to calculate our ping.
 if netPingTick mod 8 == 0 {
     netPacketSend(netSocket,msgPing,buffer_u32,current_time)
 }
@@ -78,6 +83,7 @@ if netPingTick mod 8 == 0 {
           <argument>
             <kind>1</kind>
             <string>switch async_load[? "type"] {
+    // -- Check our incoming data, if it is a packet, process it.
     case network_type_data: {
         netPacketClient(async_load[? "buffer"])
     break}
@@ -104,7 +110,8 @@ if netPingTick mod 8 == 0 {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_text(4,4,"Client#Ping: " + string(netPing))
+            <string>// -- Draw text saying we're a client and our ping.
+draw_text(4,4,"Client#Ping: " + string(netPing))
 </string>
           </argument>
         </arguments>

@@ -25,7 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>netServer = network_create_server(network_socket_tcp,15000,32)
+            <string>// -- Create a server that sockets can connect to.
+netServer = network_create_server(network_socket_tcp,15000,32)
+// -- Make a data structure that we can store socket ids in.
 netSockets = ds_list_create()
 </string>
           </argument>
@@ -50,10 +52,16 @@ netSockets = ds_list_create()
           <argument>
             <kind>1</kind>
             <string>switch async_load[? "type"] {
+    // -- If a socket has connected to our server make sure that we
+    // -- store their socket id in the data strucutre we created for
+    // -- future use.
     case network_type_connect: {
         ds_list_add(netSockets,async_load[? "id"])
     break}
     
+    // -- Much like the connect event, this we just check the socket id
+    // -- of the socket that sent this and then check if it is stored anywhere
+    // -- in our data strucutre, if so delete it from the data strucutre.   
     case network_type_disconnect: {
         var netSocketFind = ds_list_find_value(netSockets,async_load[? "id"])
         if netSocketFind &gt;= 0 {
@@ -61,6 +69,8 @@ netSockets = ds_list_create()
         }
     break}
     
+    // -- This event is used to process any packets we recieved. The buffer and socket ID we recieved is processed
+    // -- using the "netPacketServer" script we made.
     case network_type_data: {
         netPacketServer(async_load[? "buffer"],async_load[? "id"])
     break}
@@ -87,9 +97,8 @@ netSockets = ds_list_create()
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_halign(fa_left)
-draw_set_valign(fa_top)
-draw_text_colour(4,4,"Server#Players: " + string(ds_list_size(netSockets)) + "/32",c_white,c_white,c_white,c_white,1)
+            <string>// -- Draw text saying we're a server and how many players are currently connected.
+draw_text(4,4,"Server#Players: " + string(ds_list_size(netSockets)) + "/32")
 </string>
           </argument>
         </arguments>
